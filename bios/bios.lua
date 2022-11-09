@@ -59,6 +59,7 @@ local executeString = function(...)
 			return
 		end
     end
+    crash(err)
 end
 println("EEPROM init done!")
 local disk=getBootableDisk()
