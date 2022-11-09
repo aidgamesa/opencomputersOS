@@ -34,5 +34,9 @@ io.println("Hello, world")
 
 while 1 do 
     curr_event = event.next()
-    io.println("event ".. curr_event[1] .. " from " .. curr_event[#curr_event])
+    if curr_event[1] == "key_down" then
+        if curr_event[3] > 0 then
+            io.print(string.char(curr_event[3]))
+        end
+    end
 end
