@@ -24,6 +24,7 @@ else
 end
 
 local io = require("io")
+local event = require("event")
 
 io.init()
 io.clear()
@@ -32,5 +33,6 @@ io.println("Hello, world")
 io.println("Hello, world")
 
 while 1 do 
-    computer.pullSignal()
+    curr_event = event.next()
+    io.println("event ".. curr_event[1] .. " from " .. curr_event[#curr_event])
 end
