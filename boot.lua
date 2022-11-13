@@ -4,12 +4,18 @@ local eeprom = component.proxy(
 local disk   = component.proxy(
     eeprom.getData()
 )
+libs_loaded={}
 
 require = function(module)
+    if libs_loaded[module] ~= nil then
+        return libs_loaded[module]
+    end
     local fd=disk.open("lib/" .. module .. ".lua")
     data=disk.read(fd, math.huge)
     disk.close(fd)
-    return load(data)()
+    lib=load(data)()
+    libs_loaded[module]=lib
+    return lib
 end
 
 executeFile = function(file)
