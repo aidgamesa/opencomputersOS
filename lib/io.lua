@@ -1,6 +1,7 @@
 local gpu    = component.proxy(
     component.list("gpu")()
 )
+local event = require("event")
 
 io = {}
 
@@ -45,6 +46,33 @@ end
 
 function io.println(msg)
     io.print(msg .. "\n")
+end
+
+function io.input(printmsg)
+    if printmsg ~= nil then
+        io.print(printmsg)
+    end
+    start_x=screen_pos_x
+    start_y=screen_pos_y
+    local data = ""
+    while 1 do 
+        local event = event.next()
+        if event[1] == "key_down" then
+            if event[3] == 8 then
+                if start_y<screen_pos_y or (start_y==screen_pos_y and start_x<screen_pos_x ) then
+                    io.print(string.char(event[3]))
+                    data=data:sub(1,#data-1)
+                end
+            elseif event[3]==13 or string.char(event[3])=="\n" then
+                break
+            else
+                data=data..string.char(event[3])
+                io.print(string.char(event[3]))
+            end
+        end
+    end
+    io.println("")
+    return data
 end
 
 function io.clear()

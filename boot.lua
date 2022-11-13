@@ -5,14 +5,19 @@ local disk   = component.proxy(
     eeprom.getData()
 )
 
-local require = function(module)
+require = function(module)
     local fd=disk.open("lib/" .. module .. ".lua")
     data=disk.read(fd, math.huge)
     disk.close(fd)
     return load(data)()
 end
 
-
+executeFile = function(file)
+    local fd=disk.open(file)
+    data=disk.read(fd, math.huge)
+    disk.close(fd)
+    return load(data)()()
+end
 
 local text
 if disk.exists("text.txt") then
@@ -33,10 +38,11 @@ io.println("Hello, world")
 io.println("Hello, world")
 
 while 1 do 
-    curr_event = event.next()
-    if curr_event[1] == "key_down" then
-        if curr_event[3] > 0 then
-            io.print(string.char(curr_event[3]))
-        end
+    local data = io.input("/root # ")
+    local file="/bin/"..data..".lua"
+    if disk.exists(file)==false then
+        io.println("[ERROR] '" .. file .. "' not found!" )
+    else
+        executeFile(file)
     end
 end
