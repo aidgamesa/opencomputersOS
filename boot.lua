@@ -1,7 +1,7 @@
 local eeprom = component.proxy(
     component.list("eeprom")()
 )
-local disk   = component.proxy(
+disk   = component.proxy(
     eeprom.getData()
 )
 libs_loaded={}
@@ -43,8 +43,10 @@ io.println("Hello, world")
 io.println("Hello, world")
 io.println("Hello, world")
 
+pwd="/"
+
 while 1 do 
-    local data = io.input("/root # ")
+    local data = io.input(pwd.." # ")
     local file="/bin/"..data..".lua"
     if disk.exists(file)==false then
         io.println("[ERROR] '" .. file .. "' not found!" )
