@@ -12,7 +12,7 @@ for path, dirs, files in os.walk("."):
 		file_str=path+"/"+file if path!="." else file
 		file_str=file_str[2:] if file_str.startswith("./") else file_str
 		if file_str.startswith(git_dir) or file_str.startswith(scripts_dir) \
-			or file_str.startswith(bios_dir) :
+			or file_str.startswith(bios_dir) or file_str.startswith(file_save):
 			continue
 		installer_files.append(file_str)
 lua_data="return {"+", ".join("\"{}\"".format(file) for file in installer_files)+"}\n"
