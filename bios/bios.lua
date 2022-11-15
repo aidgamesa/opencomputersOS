@@ -54,10 +54,7 @@ end
 local executeString = function(...)
     local result, err = load(...)
     if result then
-        result, err = xpcall(result, debug.traceback)
-		if result then
-			return
-		end
+        return result()
     end
     crash(err)
 end
