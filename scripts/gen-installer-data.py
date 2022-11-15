@@ -1,18 +1,18 @@
 import os
 import json
 
-scripts_dir="scripts"
-git_dir=".git"
-bios_dir="bios"
+def multi_startswith(data, starts):
+	return True in [data.startswith(i) for i in starts]
+
 file_save="installer_data.lua"
+starts=["scripts", ".git", "bios", "installer.lua", file_save]
 
 installer_files=[]
 for path, dirs, files in os.walk("."):
 	for file in files:
 		file_str=path+"/"+file if path!="." else file
 		file_str=file_str[2:] if file_str.startswith("./") else file_str
-		if file_str.startswith(git_dir) or file_str.startswith(scripts_dir) \
-			or file_str.startswith(bios_dir) or file_str.startswith(file_save):
+		if multi_startswith(file_str, starts):
 			continue
 		installer_files.append(file_str)
 lua_data="return {\n\t"+",\n\t".join("\"{}\"".format(file) for file in installer_files)+"\n}"
