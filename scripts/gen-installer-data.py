@@ -15,7 +15,7 @@ for path, dirs, files in os.walk("."):
 			or file_str.startswith(bios_dir) or file_str.startswith(file_save):
 			continue
 		installer_files.append(file_str)
-lua_data="return {"+", ".join("\"{}\"".format(file) for file in installer_files)+"}\n"
+lua_data="return {\n\t"+",\n\t".join("\"{}\"".format(file) for file in installer_files)+"\n}"
 file=open(file_save, "w+")
 file.write(lua_data)
 file.close()
