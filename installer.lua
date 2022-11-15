@@ -7,6 +7,40 @@ if a=="n" then
     print("Canceling...")
     return
 end
---TODO: normal functional
+if component==nil then
+	component=require("component")
+end
+network_component=component.list("internet")()
+if network_component==nil then
+    print("Network card not found!")
+    return 
+end
+network_component=component.proxy(network_component)
+if network_component.isHttpEnabled()~=true then
+    print("http disabled!")
+    return 
+end
+fs_components=component.list("filesystem")
+for address,_ in fs_components do
+	if component.proxy(address).getLabel()~="tmpfs" then
+		fs_component=component.proxy(address)
+	end
+end
 print("Installing...")
-print(":)")
+base_url="https://raw.githubusercontent.com/aidgamesa/opencomputersOS/main/"
+local fileDirectory = function(path)
+	return path:match("^(.+%/).") or ""
+end
+local getData = function(url)
+	req=network_component.request(base_url..url)
+	while 1 do
+		status,err = req.finishConnect()
+		if status then
+			break
+		end
+		os.sleep(0.05)
+	end
+	data=req.read(math.huge)
+	return data
+end
+installer_data=load(getData("installer_data.lua"))()
